@@ -7,9 +7,16 @@ export default {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./features/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'tactic-bold': ['Tactic-Bld', 'ui-sans-serif', 'system-ui'],
+        'tactic-med': ['Tactic-Med', 'ui-sans-serif', 'system-ui'],
+        'tektur': ['Tektur-Regular', 'ui-sans-serif', 'system-ui'],
+        'ttfirs': ['TTFirs', 'ui-sans-serif', 'system-ui'],
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

@@ -1,58 +1,119 @@
-import { DeployButton } from "@/components/deploy-button";
-import { EnvVarWarning } from "@/components/env-var-warning";
-import { AuthButton } from "@/components/auth-button";
-import { Hero } from "@/components/hero";
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import { ConnectSupabaseSteps } from "@/components/tutorial/connect-supabase-steps";
-import { SignUpUserSteps } from "@/components/tutorial/sign-up-user-steps";
-import { hasEnvVars } from "@/lib/utils";
-import Link from "next/link";
-import { Suspense } from "react";
+import { createClient } from '@/lib/supabase/server';
+import { Suspense } from 'react';
+import { FAQSection } from '@/features/FAQ';
+import { ServicesSection } from '@/features/Services';
 
-export default function Home() {
-  return (
-    <main className="min-h-screen flex flex-col items-center">
-      <div className="flex-1 w-full flex flex-col gap-20 items-center">
-        <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-          <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
-            <div className="flex gap-5 items-center font-semibold">
-              <Link href={"/"}>Next.js Supabase Starter</Link>
-              <div className="flex items-center gap-2">
-                <DeployButton />
-              </div>
-            </div>
-            {!hasEnvVars ? (
-              <EnvVarWarning />
-            ) : (
-              <Suspense>
-                <AuthButton />
-              </Suspense>
-            )}
-          </div>
-        </nav>
-        <div className="flex-1 flex flex-col gap-20 max-w-5xl p-5">
-          <Hero />
-          <main className="flex-1 flex flex-col gap-6 px-4">
-            <h2 className="font-medium text-xl mb-4">Next steps</h2>
-            {hasEnvVars ? <SignUpUserSteps /> : <ConnectSupabaseSteps />}
-          </main>
-        </div>
+interface ServiceItem {
+	color: string;
+	icon_default: string;
+	icon_active: string;
+	text: string;
+}
 
-        <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
-          <p>
-            Powered by{" "}
-            <a
-              href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-              target="_blank"
-              className="font-bold hover:underline"
-              rel="noreferrer"
-            >
-              Supabase
-            </a>
-          </p>
-          <ThemeSwitcher />
-        </footer>
-      </div>
-    </main>
-  );
+interface Service {
+	id: number;
+	section_title: string;
+	items: ServiceItem[];
+}
+
+// async function ServicesSection() {
+// 	const supabase = await createClient();
+	
+// 	const { data: services } = await supabase
+// 		.from('services')
+// 		.select('*')
+// 		.order('created_at', { ascending: false });
+
+// 	return (
+// 		<>
+// 			{services?.map((service: Service) => (
+// 				<section key={service.id} className="w-full max-w-6xl px-4">
+// 					<h2 className="text-4xl font-bold text-center mb-12">
+// 						{service.section_title}
+// 					</h2>
+// 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+// 						{service.items.map((item, index) => (
+// 							<div
+// 								key={index}
+// 								className="group flex flex-col items-center text-center p-6 rounded-lg border transition-all hover:shadow-lg"
+// 								style={{ borderColor: item.color }}
+// 							>
+// 								<div className="mb-4 transition-opacity">
+// 									<img
+// 										src={item.icon_default}
+// 										alt={item.text}
+// 										className="h-16 w-16 object-contain group-hover:hidden"
+// 									/>
+// 									<img
+// 										src={item.icon_active}
+// 										alt={item.text}
+// 										className="h-16 w-16 object-contain hidden group-hover:block"
+// 									/>
+// 								</div>
+// 								<p className="text-lg" style={{ color: item.color }}>
+// 									{item.text}
+// 								</p>
+// 							</div>
+// 						))}
+// 					</div>
+// 				</section>
+// 			))}
+// 		</>
+// 	);
+// }
+
+export default async function Home() {
+	const supabase = await createClient();
+
+	const { data: faqs } = await supabase
+		.from('faq')
+		.select('*')
+		.order('created_at', { ascending: false });
+
+		console.log('faq', faqs)
+
+		const { data: services } = await supabase
+			.from('services')
+			.select('*')
+			.order('created_at', { ascending: false });
+
+			console.log('services', services);
+
+	return (
+		<main className='min-h-screen'>
+			<Suspense
+				fallback={
+					<div className='w-full max-w-6xl px-4'>
+						<div className='animate-pulse'>
+							<div className='h-12 bg-gray-200 rounded w-64 mx-auto mb-12'></div>
+							<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+								{[1, 2, 3].map(i => (
+									<div key={i} className='h-48 bg-gray-200 rounded'></div>
+								))}
+							</div>
+						</div>
+					</div>
+				}
+			>
+				<ServicesSection />
+			</Suspense>
+
+			<Suspense
+				fallback={
+					<div className='w-full max-w-4xl px-4'>
+						<div className='animate-pulse'>
+							<div className='h-12 bg-gray-200 rounded w-64 mx-auto mb-12'></div>
+							<div className='space-y-4'>
+								{[1, 2, 3, 4].map(i => (
+									<div key={i} className='h-20 bg-gray-200 rounded'></div>
+								))}
+							</div>
+						</div>
+					</div>
+				}
+			>
+				<FAQSection faqs={faqs} />
+			</Suspense>
+		</main>
+	);
 }

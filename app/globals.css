@@ -2,6 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
+/* FONTS */
+@font-face {
+  font-family: 'Tactic-Bld';
+  font-style: normal;
+	font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/TacticSans-Bld.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Tactic-Med';
+  font-style: normal;
+	font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/TacticSans-Med.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Tektur-Regular';
+  font-style: normal;
+	font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/Tektur-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'TTFirs';
+  font-style: normal;
+	font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/TTFirsNeue-DemiBold.ttf') format('truetype');
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
